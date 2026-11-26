@@ -1,27 +1,37 @@
 
 [
     {
-        "id": "MTG-2027-001",
-        "title": "Regular Board Meeting - Demonstration",
+        "id": "MTG-2026-001",
+        "title": "November 2026 Board Meeting",
         "type": "Regular Board Meeting",
-        "date": "2027-01-25",
-        "time": "9:00 AM Pacific Time",
-        "location": "To Be Determined",
-        "description": "Demonstration of an upcoming SNCCD board meeting. This is not an official meeting notice.",
+        "date": "2026-11-09",
+        "time": "1:00 PM PST",
+        "location": "Virtual - Microsoft Teams",
+        "description": "Scheduled agenda items included district correspondence, financial reports, agency and partner updates, the website proposal, water quality standards, the Mosely Solar Project and the Community Wildfire Protection Plan.",
         "virtualUrl": "",
-        "documents": [],
+        "documents": [
+            {
+                "title": "Meeting Notice and Agenda (PDF)",
+                "url": "documents/meetings/2026/November/2026-11-09-Board-Agenda.pdf"
+            }
+        ],
         "published": true
     },
     {
-        "id": "MTG-2026-001",
-        "title": "November Board Meeting - Demonstration",
-        "type": "Regular Board Meeting",
+        "id": "MTG-2026-002",
+        "title": "2026 Supervisor Election",
+        "type": "Mass Meeting Election",
         "date": "2026-11-09",
-        "time": "",
-        "location": "",
-        "description": "Demonstration of the historical meeting archive. Official meeting documents will be added following review.",
+        "time": "11:00 AM PST",
+        "location": "Beatty Community Center, 100 A Avenue S., Beatty, NV 89003",
+        "description": "Mass meeting of eligible electors for the election of two Conservation District Supervisors to serve four-year terms.",
         "virtualUrl": "",
-        "documents": [],
+        "documents": [
+            {
+                "title": "Election Notice and Agenda (PDF)",
+                "url": "documents/meetings/2026/November/2026-11-09-Election-Agenda.pdf"
+            }
+        ],
         "published": true
     }
 ]
