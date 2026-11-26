@@ -1,2 +1,13 @@
-# Website
-Paking space for developing the SNCCD website
+Website/
+index.html
+about.html
+meetings.html
+grants.html
+conservation.html
+education.html
+news.html
+opportunities.html
+partners.html
+contact.html
+css
+  styles.css
