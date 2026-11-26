@@ -463,3 +463,29 @@ tbody tr:nth-child(even) {
         transition: none !important;
     }
 }
+
+
+/* =====================================================
+   Temporary Board Review Banner
+   Remove before official website launch
+   ===================================================== */
+
+.draft-banner {
+    background: #fff3cd;
+    color: #664d03;
+    border-bottom: 2px solid #d8b65c;
+    padding: 10px 15px;
+    text-align: center;
+}
+
+.draft-banner strong {
+    display: block;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+.draft-banner span {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}

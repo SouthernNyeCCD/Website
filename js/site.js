@@ -33,6 +33,14 @@ function renderHeader() {
     if (!header) return;
 
     header.innerHTML = `
+        <div class="draft-banner">
+            <strong>DRAFT WEBSITE - FOR BOARD REVIEW</strong>
+            <span>
+                Under development. Not yet approved
+                for official publication.
+            </span>
+        </div>
+
         <header class="site-header">
             <div class="container">
                 <h1>Southern Nye County Conservation District</h1>
