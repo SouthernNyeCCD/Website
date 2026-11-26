@@ -519,3 +519,44 @@ tbody tr:nth-child(even) {
     font-weight: bold;
     color: var(--primary);
 }
+
+/* =====================================================
+   Public Meetings and Meeting Archive
+   ===================================================== */
+
+.meeting-date {
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.archive-year {
+    background: #e5e8df;
+    border-left: 4px solid var(--primary);
+    padding: 12px 18px;
+    margin-top: 25px;
+    border-radius: var(--radius);
+    font-size: 1.4rem;
+}
+
+#meetings-list > h2 {
+    margin-top: 35px;
+    margin-bottom: 20px;
+}
+
+#meetings-list > h2:first-child {
+    margin-top: 0;
+}
+
+.listing h4 {
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.document-list a {
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.document-list a:hover {
+    color: var(--secondary);
+}

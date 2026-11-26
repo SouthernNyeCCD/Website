@@ -5,12 +5,14 @@
    ===================================================== */
 
 
+
 document.addEventListener("DOMContentLoaded", () => {
     renderHeader();
     renderNavigation();
     renderFooter();
     loadNews();
     loadGrants();
+    loadMeetings();
 });
 
 /* Website Navigation */
@@ -409,6 +411,331 @@ function renderGrants(container, items, expired = false) {
 
                 article.appendChild(link);
             }
+        }
+
+        container.appendChild(article);
+    });
+}
+
+
+/* =====================================================
+   Public Meetings and Historical Archive
+   ===================================================== */
+
+async function loadMeetings() {
+
+    const homeMeetings =
+        document.getElementById("home-meetings");
+
+    const meetingsList =
+        document.getElementById("meetings-list");
+
+    if (!homeMeetings && !meetingsList) return;
+
+    try {
+
+        const meetings = await loadData("meetings");
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Identify upcoming meetings
+
+        const upcoming = meetings
+            .filter(item =>
+                new Date(item.date + "T00:00:00") >= today
+            )
+            .sort((a, b) =>
+                a.date.localeCompare(b.date)
+            );
+
+        // Identify historical meetings
+
+        const past = meetings
+            .filter(item =>
+                new Date(item.date + "T00:00:00") < today
+            )
+            .sort((a, b) =>
+                b.date.localeCompare(a.date)
+            );
+
+        // Homepage: next three meetings
+
+        if (homeMeetings) {
+            renderMeetings(
+                homeMeetings,
+                upcoming.slice(0, 3)
+            );
+        }
+
+        // Public Meetings page
+
+        if (meetingsList) {
+
+            meetingsList.replaceChildren();
+
+            const upcomingHeading =
+                document.createElement("h2");
+
+            upcomingHeading.textContent =
+                "Upcoming Public Meetings";
+
+            const upcomingContainer =
+                document.createElement("div");
+
+            meetingsList.append(
+                upcomingHeading,
+                upcomingContainer
+            );
+
+            renderMeetings(
+                upcomingContainer,
+                upcoming
+            );
+
+            // Historical archive
+
+            const archiveHeading =
+                document.createElement("h2");
+
+            archiveHeading.textContent =
+                "Historical Meeting Archive";
+
+            meetingsList.appendChild(archiveHeading);
+
+            if (past.length === 0) {
+
+                const empty =
+                    document.createElement("div");
+
+                empty.className = "empty-state";
+
+                empty.textContent =
+                    "No historical meetings available.";
+
+                meetingsList.appendChild(empty);
+            }
+
+            // Group historical meetings by year
+
+            const years = [
+                ...new Set(
+                    past.map(item =>
+                        item.date.substring(0, 4)
+                    )
+                )
+            ].sort((a, b) => b.localeCompare(a));
+
+            years.forEach(year => {
+
+                const yearHeading =
+                    document.createElement("h3");
+
+                yearHeading.className =
+                    "archive-year";
+
+                yearHeading.textContent = year;
+
+                const yearContainer =
+                    document.createElement("div");
+
+                const yearMeetings = past.filter(
+                    item => item.date.startsWith(year)
+                );
+
+                meetingsList.append(
+                    yearHeading,
+                    yearContainer
+                );
+
+                renderMeetings(
+                    yearContainer,
+                    yearMeetings,
+                    true
+                );
+            });
+        }
+
+    } catch (error) {
+
+        console.error("Error loading meetings:", error);
+
+        [homeMeetings, meetingsList]
+            .filter(Boolean)
+            .forEach(container => {
+                container.textContent =
+                    "Meeting information is temporarily unavailable.";
+            });
+    }
+}
+
+
+/* =====================================================
+   Render Meeting Listings
+   ===================================================== */
+
+function renderMeetings(container, items, historical = false) {
+
+    container.replaceChildren();
+
+    if (items.length === 0) {
+
+        const empty = document.createElement("div");
+
+        empty.className = "empty-state";
+
+        empty.textContent =
+            "No upcoming meetings currently posted.";
+
+        container.appendChild(empty);
+
+        return;
+    }
+
+    items.forEach(item => {
+
+        const article = document.createElement("article");
+        article.className = "listing";
+
+        // Meeting title
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        // Meeting type
+
+        const metadata = document.createElement("div");
+        metadata.className = "listing-date";
+        metadata.textContent = item.type;
+
+        // Meeting status
+
+        const status = document.createElement("span");
+
+        status.className = historical
+            ? "status-closed"
+            : "status-open";
+
+        status.textContent = historical
+            ? "Past Meeting"
+            : "Upcoming";
+
+        // Meeting date
+
+        const date = document.createElement("p");
+        date.className = "meeting-date";
+
+        date.textContent =
+            `Date: ${formatDate(item.date)}`;
+
+        article.append(
+            title,
+            metadata,
+            status,
+            date
+        );
+
+        // Meeting time
+
+        if (item.time) {
+
+            const time = document.createElement("p");
+            time.textContent = `Time: ${item.time}`;
+
+            article.appendChild(time);
+        }
+
+        // Meeting location
+
+        if (item.location) {
+
+            const location = document.createElement("p");
+            location.textContent =
+                `Location: ${item.location}`;
+
+            article.appendChild(location);
+        }
+
+        // Meeting description
+
+        if (item.description) {
+
+            const description =
+                document.createElement("p");
+
+            description.textContent =
+                item.description;
+
+            article.appendChild(description);
+        }
+
+        // Virtual meeting link
+
+        if (!historical && item.virtualUrl) {
+
+            const url = new URL(
+                item.virtualUrl,
+                document.baseURI
+            );
+
+            if (["http:", "https:"].includes(url.protocol)) {
+
+                const link =
+                    document.createElement("a");
+
+                link.href = url.href;
+                link.textContent = "Join Virtual Meeting";
+                link.className = "button";
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                article.appendChild(link);
+            }
+        }
+
+        // Associated meeting documents
+
+        if (Array.isArray(item.documents) &&
+            item.documents.length > 0) {
+
+            const heading =
+                document.createElement("h4");
+
+            heading.textContent = "Meeting Documents";
+
+            const list =
+                document.createElement("ul");
+
+            list.className = "document-list";
+
+            item.documents.forEach(doc => {
+
+                if (!doc.url) return;
+
+                const url = new URL(
+                    doc.url,
+                    document.baseURI
+                );
+
+                if (!["http:", "https:"]
+                    .includes(url.protocol)) return;
+
+                const listItem =
+                    document.createElement("li");
+
+                const link =
+                    document.createElement("a");
+
+                link.href = url.href;
+                link.textContent = doc.title;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                listItem.appendChild(link);
+                list.appendChild(listItem);
+            });
+
+            article.append(heading, list);
         }
 
         container.appendChild(article);

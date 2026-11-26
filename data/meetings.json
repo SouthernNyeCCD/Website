@@ -1,1 +1,27 @@
-[]
+
+[
+    {
+        "id": "MTG-2027-001",
+        "title": "Regular Board Meeting - Demonstration",
+        "type": "Regular Board Meeting",
+        "date": "2027-01-25",
+        "time": "9:00 AM Pacific Time",
+        "location": "To Be Determined",
+        "description": "Demonstration of an upcoming SNCCD board meeting. This is not an official meeting notice.",
+        "virtualUrl": "",
+        "documents": [],
+        "published": true
+    },
+    {
+        "id": "MTG-2026-001",
+        "title": "November Board Meeting - Demonstration",
+        "type": "Regular Board Meeting",
+        "date": "2026-11-09",
+        "time": "",
+        "location": "",
+        "description": "Demonstration of the historical meeting archive. Official meeting documents will be added following review.",
+        "virtualUrl": "",
+        "documents": [],
+        "published": true
+    }
+]
