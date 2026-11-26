@@ -1,1 +1,16 @@
-[]
+
+[
+    {
+        "id": "GRANT-2026-001",
+        "title": "Conservation Funding - Demonstration",
+        "organization": "Example Conservation Organization",
+        "category": "Agricultural Conservation",
+        "date": "2026-11-26",
+        "deadline": "2027-03-31",
+        "summary": "Example funding opportunity demonstrating how conservation programs will be presented on the SNCCD website.",
+        "eligibility": "Example: Agricultural producers and landowners.",
+        "url": "",
+        "linkText": "Program Information",
+        "published": true
+    }
+]

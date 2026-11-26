@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderNavigation();
     renderFooter();
     loadNews();
+    loadGrants();
 });
 
 /* Website Navigation */
@@ -232,4 +233,184 @@ function formatDate(dateString) {
             month: "long",
             day: "numeric"
         });
+}
+
+
+/* =====================================================
+   Shared JSON Data Loader
+   ===================================================== */
+
+async function loadData(fileName) {
+
+    const response = await fetch(`data/${fileName}.json`);
+
+    if (!response.ok) {
+        throw new Error(`Unable to load ${fileName} data.`);
+    }
+
+    const data = await response.json();
+
+    return data.filter(item => item.published === true);
+}
+
+
+/* =====================================================
+   Grants and Funding
+   ===================================================== */
+
+async function loadGrants() {
+
+    const homeGrants = document.getElementById("home-grants");
+    const grantsList = document.getElementById("grants-list");
+
+    if (!homeGrants && !grantsList) return;
+
+    try {
+
+        const grants = await loadData("grants");
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const currentGrants = grants
+            .filter(item =>
+                !item.deadline ||
+                new Date(item.deadline + "T00:00:00") >= today
+            )
+            .sort((a, b) =>
+                (a.deadline || "9999-12-31")
+                .localeCompare(b.deadline || "9999-12-31")
+            );
+
+        const expiredGrants = grants
+            .filter(item =>
+                item.deadline &&
+                new Date(item.deadline + "T00:00:00") < today
+            )
+            .sort((a, b) =>
+                b.deadline.localeCompare(a.deadline)
+            );
+
+        if (homeGrants) {
+            renderGrants(homeGrants, currentGrants.slice(0, 3));
+        }
+
+        if (grantsList) {
+
+            renderGrants(grantsList, currentGrants);
+
+            if (expiredGrants.length > 0) {
+
+                const heading = document.createElement("h2");
+                heading.textContent = "Past Funding Opportunities";
+
+                const archive = document.createElement("div");
+
+                grantsList.append(heading, archive);
+
+                renderGrants(archive, expiredGrants, true);
+            }
+        }
+
+    } catch (error) {
+
+        console.error("Error loading grants:", error);
+
+        [homeGrants, grantsList]
+            .filter(Boolean)
+            .forEach(container => {
+                container.textContent =
+                    "Funding information is temporarily unavailable.";
+            });
+    }
+}
+
+
+/* Render Grant Listings */
+
+function renderGrants(container, items, expired = false) {
+
+    container.replaceChildren();
+
+    if (items.length === 0) {
+
+        const empty = document.createElement("div");
+
+        empty.className = "empty-state";
+        empty.textContent =
+            "No current funding opportunities at this time.";
+
+        container.appendChild(empty);
+
+        return;
+    }
+
+    items.forEach(item => {
+
+        const article = document.createElement("article");
+        article.className = "listing";
+
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+
+        const metadata = document.createElement("div");
+        metadata.className = "listing-date";
+        metadata.textContent =
+            `${item.organization} | ${item.category}`;
+
+        const summary = document.createElement("p");
+        summary.textContent = item.summary;
+
+        const eligibility = document.createElement("p");
+        eligibility.textContent =
+            `Eligibility: ${item.eligibility || "See program details"}`;
+
+        const deadline = document.createElement("p");
+        deadline.className = "grant-deadline";
+
+        deadline.textContent = expired
+            ? `Closed: ${formatDate(item.deadline)}`
+            : item.deadline
+                ? `Application Deadline: ${formatDate(item.deadline)}`
+                : "Application Deadline: Ongoing";
+
+        const status = document.createElement("span");
+
+        status.className = expired
+            ? "status-closed"
+            : "status-open";
+
+        status.textContent = expired
+            ? "Closed"
+            : "Open";
+
+        article.append(
+            title,
+            metadata,
+            status,
+            summary,
+            eligibility,
+            deadline
+        );
+
+        if (item.url) {
+
+            const url = new URL(item.url, document.baseURI);
+
+            if (["http:", "https:"].includes(url.protocol)) {
+
+                const link = document.createElement("a");
+
+                link.href = url.href;
+                link.textContent =
+                    item.linkText || "Program Information";
+
+                link.className = "button";
+
+                article.appendChild(link);
+            }
+        }
+
+        container.appendChild(article);
+    });
 }

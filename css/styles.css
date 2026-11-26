@@ -489,3 +489,33 @@ tbody tr:nth-child(even) {
     font-size: 0.85rem;
     margin-top: 4px;
 }
+
+
+/* =====================================================
+   Grant and Funding Status
+   ===================================================== */
+
+.status-open,
+.status-closed {
+    display: inline-block;
+    padding: 4px 12px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.status-open {
+    background: #e2eddf;
+    color: #354c37;
+}
+
+.status-closed {
+    background: #eeeeee;
+    color: #666666;
+}
+
+.grant-deadline {
+    font-weight: bold;
+    color: var(--primary);
+}
