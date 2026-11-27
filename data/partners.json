@@ -1,1 +1,103 @@
-[]
+
+[
+    {
+        "id": "PARTNER-001",
+        "name": "Bureau of Land Management",
+        "abbreviation": "BLM",
+        "category": "Federal Agencies",
+        "description": "Manages public lands and natural resources, supporting responsible land use, conservation and habitat management.",
+        "url": "https://www.blm.gov/nevada",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-002",
+        "name": "Natural Resources Conservation Service",
+        "abbreviation": "NRCS",
+        "category": "Federal Agencies",
+        "description": "Provides technical and financial assistance to agricultural producers and landowners to conserve natural resources.",
+        "url": "https://www.nrcs.usda.gov/",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-003",
+        "name": "U.S. Fish and Wildlife Service",
+        "abbreviation": "USFWS",
+        "category": "Federal Agencies",
+        "description": "Supports the conservation of fish, wildlife, plants and their habitats.",
+        "url": "https://www.fws.gov/",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-004",
+        "name": "Nevada Division of Conservation Districts",
+        "abbreviation": "DCNR",
+        "category": "State Agencies and Institutions",
+        "description": "Supports Nevada's conservation districts in implementing locally led natural resource conservation programs.",
+        "url": "https://dcnr.nv.gov/",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-005",
+        "name": "Nevada Department of Wildlife",
+        "abbreviation": "NDOW",
+        "category": "State Agencies and Institutions",
+        "description": "Protects and manages Nevada's wildlife resources and associated habitats.",
+        "url": "https://www.ndow.org/",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-006",
+        "name": "University of Nevada, Reno Extension",
+        "abbreviation": "UNR Extension",
+        "category": "State Agencies and Institutions",
+        "description": "Provides research-based education and resources related to agriculture, horticulture, natural resources and community development.",
+        "url": "https://extension.unr.edu/",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-007",
+        "name": "National Association of Conservation Districts",
+        "abbreviation": "NACD",
+        "category": "Conservation Organizations",
+        "description": "Represents conservation districts nationwide and supports locally led conservation through advocacy, education and funding opportunities.",
+        "url": "https://www.nacdnet.org/",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-008",
+        "name": "Nevada Association of Conservation Districts",
+        "abbreviation": "NvACD",
+        "category": "Conservation Organizations",
+        "description": "Supports collaboration, education and representation among Nevada's conservation districts.",
+        "url": "",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-009",
+        "name": "Nevada Section of the Society for Range Management",
+        "abbreviation": "Nevada SRM",
+        "category": "Conservation Organizations",
+        "description": "Promotes sustainable rangeland management, education and the conservation of rangeland resources.",
+        "url": "https://rangelands.org/",
+        "logo": "",
+        "published": true
+    },
+    {
+        "id": "PARTNER-010",
+        "name": "Conservation District of Southern Nevada",
+        "abbreviation": "CDSN",
+        "category": "Local and Regional Partners",
+        "description": "Promotes natural resource conservation, education and community partnerships in Southern Nevada.",
+        "url": "https://cdsn.org/",
+        "logo": "",
+        "published": true
+    }
+]

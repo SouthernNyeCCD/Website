@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadGrants();
     loadMeetings();
     loadOpportunities();
+    loadPartners();
 });
 
 /* Website Navigation */
@@ -972,6 +973,155 @@ function renderOpportunities(container, items, expired = false) {
                 link.textContent =
                     item.linkText || "More Information";
 
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                article.appendChild(link);
+            }
+        }
+
+        container.appendChild(article);
+    });
+}
+
+
+/* ========================================
+   CONSERVATION PARTNERS
+======================================== */
+
+async function loadPartners() {
+
+    const container = document.getElementById("partners-list");
+
+    if (!container) return;
+
+    try {
+
+        const partners = await loadData("partners");
+
+        container.replaceChildren();
+
+        if (partners.length === 0) {
+
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+            empty.textContent =
+                "Partner information will be available soon.";
+
+            container.appendChild(empty);
+            return;
+        }
+
+        const categoryOrder = [
+            "Federal Agencies",
+            "State Agencies and Institutions",
+            "Conservation Organizations",
+            "Local and Regional Partners"
+        ];
+
+        const categories = [...new Set([
+            ...categoryOrder,
+            ...partners.map(item => item.category || "Other Partners")
+        ])];
+
+        categories.forEach(category => {
+
+            const items = partners
+                .filter(item =>
+                    (item.category || "Other Partners") === category
+                )
+                .sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                );
+
+            if (items.length === 0) return;
+
+            const heading = document.createElement("h2");
+            heading.className = "partner-category";
+            heading.textContent = category;
+
+            container.appendChild(heading);
+
+            const grid = document.createElement("div");
+            grid.className = "partner-grid";
+
+            renderPartners(grid, items);
+
+            container.appendChild(grid);
+        });
+
+    } catch (error) {
+
+        console.error("Unable to load partners:", error);
+
+        container.textContent =
+            "Partner information is temporarily unavailable.";
+    }
+}
+
+
+function renderPartners(container, items) {
+
+    items.forEach(item => {
+
+        const article = document.createElement("article");
+        article.className = "partner-card";
+
+        // Optional organization logo
+        if (item.logo) {
+
+            const url = new URL(item.logo, document.baseURI);
+
+            if (["http:", "https:"].includes(url.protocol)) {
+
+                const logo = document.createElement("img");
+
+                logo.src = url.href;
+                logo.alt = item.name + " logo";
+                logo.className = "partner-logo";
+                logo.loading = "lazy";
+
+                article.appendChild(logo);
+            }
+        }
+
+        // Organization name
+        const title = document.createElement("h3");
+        title.textContent = item.name;
+
+        article.appendChild(title);
+
+        // Abbreviation
+        if (item.abbreviation) {
+
+            const abbreviation = document.createElement("div");
+            abbreviation.className = "partner-abbreviation";
+            abbreviation.textContent = item.abbreviation;
+
+            article.appendChild(abbreviation);
+        }
+
+        // Description
+        if (item.description) {
+
+            const description = document.createElement("p");
+            description.textContent = item.description;
+
+            article.appendChild(description);
+        }
+
+        // Website
+        if (item.url) {
+
+            const url = new URL(item.url, document.baseURI);
+
+            if (["http:", "https:"].includes(url.protocol)) {
+
+                const link = document.createElement("a");
+
+                link.href = url.href;
+                link.textContent = "Visit Website";
+                link.className = "button button-secondary";
                 link.target = "_blank";
                 link.rel = "noopener noreferrer";
 
