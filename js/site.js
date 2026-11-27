@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadNews();
     loadGrants();
     loadMeetings();
+    loadOpportunities();
 });
 
 /* Website Navigation */
@@ -736,6 +737,246 @@ function renderMeetings(container, items, historical = false) {
             });
 
             article.append(heading, list);
+        }
+
+        container.appendChild(article);
+    });
+}
+
+
+/* ========================================
+   OPPORTUNITIES
+======================================== */
+
+async function loadOpportunities() {
+    const container = document.getElementById("opportunities-list");
+
+    if (!container) return;
+
+    try {
+        const opportunities = await loadData("opportunities");
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const active = opportunities
+            .filter(item =>
+                !item.deadline ||
+                new Date(item.deadline + "T00:00:00") >= today
+            )
+            .sort((a, b) =>
+                (b.date || "").localeCompare(a.date || "")
+            );
+
+        const expired = opportunities
+            .filter(item =>
+                item.deadline &&
+                new Date(item.deadline + "T00:00:00") < today
+            )
+            .sort((a, b) =>
+                b.deadline.localeCompare(a.deadline)
+            );
+
+        container.replaceChildren();
+
+        const activeHeading = document.createElement("h2");
+        activeHeading.textContent = "Current Opportunities";
+        container.appendChild(activeHeading);
+
+        if (active.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+            empty.textContent =
+                "There are no current opportunities at this time.";
+            container.appendChild(empty);
+        } else {
+            renderOpportunities(container, active);
+        }
+
+        if (expired.length > 0) {
+            const heading = document.createElement("h2");
+            heading.className = "archive-year";
+            heading.textContent = "Past Opportunities";
+            container.appendChild(heading);
+
+            renderOpportunities(container, expired, true);
+        }
+
+    } catch (error) {
+        console.error("Unable to load opportunities:", error);
+        container.textContent =
+            "Opportunity information is temporarily unavailable.";
+    }
+}
+
+
+function renderOpportunities(container, items, expired = false) {
+
+    items.forEach(item => {
+
+        const article = document.createElement("article");
+        article.className = "listing";
+
+        // Title
+        const title = document.createElement("h3");
+        title.textContent = item.title;
+        article.appendChild(title);
+
+        // Organization and category
+        const metadata = document.createElement("div");
+        metadata.className = "listing-date";
+        metadata.textContent = [
+            item.organization,
+            item.category
+        ].filter(Boolean).join(" | ");
+
+        article.appendChild(metadata);
+
+        // Status
+        const status = document.createElement("span");
+        status.className = expired
+            ? "status-closed"
+            : "status-open";
+
+        status.textContent = expired
+            ? "Closed"
+            : item.deadline
+                ? "Open"
+                : "Open until filled";
+
+        article.appendChild(status);
+
+        // Summary
+        if (item.summary) {
+            const summary = document.createElement("p");
+            summary.textContent = item.summary;
+            article.appendChild(summary);
+        }
+
+        // Opportunity details
+        const details = document.createElement("div");
+        details.className = "opportunity-details";
+
+        const fields = [
+            ["Employment Type", item.employmentType],
+            ["Hours", item.hours],
+            ["Compensation", item.compensation],
+            ["Location", item.location],
+            ["Closing Date",
+                item.deadline
+                    ? formatDate(item.deadline)
+                    : "Until filled"]
+        ];
+
+        fields.forEach(([label, value]) => {
+            if (!value) return;
+
+            const line = document.createElement("div");
+            const strong = document.createElement("strong");
+
+            strong.textContent = label + ": ";
+            line.appendChild(strong);
+            line.appendChild(document.createTextNode(value));
+
+            details.appendChild(line);
+        });
+
+        article.appendChild(details);
+
+        // Contact information
+        if (!expired && (item.contact || item.phone || item.email)) {
+
+            const contact = document.createElement("div");
+            contact.className = "opportunity-contact";
+
+            const heading = document.createElement("h4");
+            heading.textContent = "Contact and Application Information";
+            contact.appendChild(heading);
+
+            if (item.contact) {
+                const name = document.createElement("div");
+                name.textContent = item.contact;
+                contact.appendChild(name);
+            }
+
+            if (item.phone) {
+                const phoneLine = document.createElement("div");
+                const phone = document.createElement("a");
+
+                phone.href = "tel:" +
+                    item.phone.replace(/[^\d+]/g, "");
+
+                phone.textContent = item.phone;
+                phoneLine.appendChild(phone);
+                contact.appendChild(phoneLine);
+            }
+
+            if (item.email) {
+                const emailLine = document.createElement("div");
+                const email = document.createElement("a");
+
+                email.href = "mailto:" + item.email +
+                    (item.emailSubject
+                        ? "?subject=" +
+                          encodeURIComponent(item.emailSubject)
+                        : "");
+
+                email.textContent = item.email;
+                emailLine.appendChild(email);
+                contact.appendChild(emailLine);
+            }
+
+            article.appendChild(contact);
+        }
+
+        // Supporting documents
+        if (Array.isArray(item.documents) && item.documents.length) {
+
+            const list = document.createElement("ul");
+            list.className = "document-list";
+
+            item.documents.forEach(doc => {
+
+                if (!doc.url) return;
+
+                const url = new URL(doc.url, document.baseURI);
+
+                if (!["http:", "https:"].includes(url.protocol)) return;
+
+                const li = document.createElement("li");
+                const link = document.createElement("a");
+
+                link.href = url.href;
+                link.textContent = doc.title || "View Document";
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                li.appendChild(link);
+                list.appendChild(li);
+            });
+
+            article.appendChild(list);
+        }
+
+        // External application link
+        if (!expired && item.url) {
+
+            const url = new URL(item.url, document.baseURI);
+
+            if (["http:", "https:"].includes(url.protocol)) {
+
+                const link = document.createElement("a");
+
+                link.href = url.href;
+                link.className = "button";
+                link.textContent =
+                    item.linkText || "More Information";
+
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                article.appendChild(link);
+            }
         }
 
         container.appendChild(article);

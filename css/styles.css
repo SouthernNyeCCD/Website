@@ -560,3 +560,35 @@ tbody tr:nth-child(even) {
 .document-list a:hover {
     color: var(--secondary);
 }
+
+/* ========================================
+   OPPORTUNITIES
+======================================== */
+
+.opportunity-details {
+    background: #f5f4ef;
+    border-left: 4px solid var(--primary);
+    padding: 15px 18px;
+    margin: 15px 0;
+    border-radius: 4px;
+    line-height: 1.8;
+}
+
+.opportunity-contact {
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.opportunity-contact h4 {
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.opportunity-contact a {
+    overflow-wrap: anywhere;
+}
+
+#opportunities-list h2 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}

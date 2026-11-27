@@ -1,1 +1,28 @@
-[]
+[
+    {
+        "id": "OPP-2026-001",
+        "title": "Administrative Assistant",
+        "organization": "Southern Nye County Conservation District",
+        "category": "Employment",
+        "date": "2026-11-27",
+        "deadline": "",
+        "employmentType": "Independent Contractor",
+        "hours": "10-15 hours per month",
+        "compensation": "$18-$25 per hour",
+        "location": "Work from home",
+        "summary": "SNCCD is seeking an Administrative Assistant to support locally led conservation efforts, coordinate administrative activities, prepare meeting agendas and minutes, and communicate with conservation partners and the public.",
+        "contact": "Melany Aten, CD Program Manager",
+        "phone": "775-625-0901",
+        "email": "Maten@dcnr.nv.gov",
+        "emailSubject": "SNCCD Admin Asst Position",
+        "url": "",
+        "linkText": "",
+        "documents": [
+            {
+                "title": "Full Job Announcement (PDF)",
+                "url": "documents/opportunities/SNCCD-Administrative-Assistant.pdf"
+            }
+        ],
+        "published": true
+    }
+]
